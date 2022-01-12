@@ -18,5 +18,10 @@ class Enigma
     array << key[3..4].to_i
     array
   end
-  
+
+  def date_to_offset(date)
+    date_squared = date.to_i ** 2
+    number_array = date_squared.to_s.chars
+    number_array.last(4).join
+  end
 end
