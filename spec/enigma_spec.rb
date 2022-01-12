@@ -8,4 +8,10 @@ RSpec.describe Enigma do
   it "exists" do
     expect(subject).to be_a Enigma
   end
-end  
+
+  context "Finding the Shifts" do
+
+    it "should generate random five digit number" do
+      expect(subject.key_generator.size).to eq(5)
+    end
+end
