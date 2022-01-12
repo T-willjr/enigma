@@ -14,4 +14,11 @@ RSpec.describe Enigma do
     it "should generate random five digit number" do
       expect(subject.key_generator.size).to eq(5)
     end
+
+    it "splits random five digit number" do
+
+      expect(subject.split("02715")).to eq([02,27,71,15])
+    end
+    
+  end
 end
