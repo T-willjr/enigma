@@ -80,4 +80,11 @@ class Enigma
     letter_encrypted
   end
 
+  def encrypt(message, key, date)
+    {
+      encryption: encryptor(message, key, date),
+      key: key,
+      date: date
+    }
+  end
 end

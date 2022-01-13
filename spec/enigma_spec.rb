@@ -46,5 +46,15 @@ RSpec.describe Enigma do
       subject.final_shift([02,27,71,15], "1025")
       expect(subject.encryptor("HELLO, world!", "02715", "040895")).to eq("keder, prrdx!")
     end
+
+    it "returns encrypted information in hash" do
+      expected =  {
+       encryption: "keder ohulw",
+       key: "02715",
+       date: "040895"
+      }
+      subject.final_shift([02,27,71,15], "1025")
+      expect(subject.encrypt("hello world", "02715", "040895")).to eq(expected)
+    end
   end
 end
