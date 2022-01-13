@@ -41,5 +41,10 @@ RSpec.describe Enigma do
       subject.final_shift([02,27,71,15], "1025")
       expect(subject.encryptor("hello world", "02715", "040895")).to eq("keder ohulw")
     end
+
+    it "encrypts a message that includes characters or capitalized" do
+      subject.final_shift([02,27,71,15], "1025")
+      expect(subject.encryptor("HELLO, world!", "02715", "040895")).to eq("keder, prrdx!")
+    end
   end
 end
