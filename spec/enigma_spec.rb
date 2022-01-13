@@ -37,5 +37,9 @@ RSpec.describe Enigma do
       expect(subject.final_shift(key, offset)).to eq(final_shift)
     end
 
+    it "encrypts a message with a key and date" do
+      subject.final_shift([02,27,71,15], "1025")
+      expect(subject.encryptor("hello world", "02715", "040895")).to eq("keder ohulw")
+    end
   end
 end
