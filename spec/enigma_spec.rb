@@ -74,5 +74,34 @@ RSpec.describe Enigma do
 
       expect(subject.encrypt("hello world", "02715", "040895")).to eq(expected)
     end
+
+    context "Decrpyting a message" do
+
+      it "decrypts a message with a key and date" do
+        expect(subject.decryptor("keder ohulw", "02715", "040895")).to eq("hello world")
+      end
+
+      it "decrypts a message that includes characters or capitalized" do
+        expect(subject.decryptor("KEDER, prrdx!$%^", "02715", "040895")).to eq("hello, world!$%^")
+      end
+
+      it "returns decrypted information in hash" do
+        expected =  {
+         decryption: "hello world",
+         key: "02715",
+         date: "040895"
+        }
+        expect(subject.decrypt("keder ohulw", "02715", "040895")).to eq(expected)
+      end
+
+      it "decrypts a message with todays date" do
+        subject.encrypt("hello world", "02715")
+        expect(subject.decrypt(subject.encrypted_message, "02715")).to eq({
+         decryption: subject.decrypted_message,
+         key: "02715",
+         date: Date.today.strftime("%d%m%y")
+        })
+      end
+    end
   end
 end
