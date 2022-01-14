@@ -1,17 +1,19 @@
 require 'pry'
 require 'date'
 class Enigma
-  attr_reader :encrypted_message
+  attr_reader :encrypted_message, :random_key
+  
   def initialize
     @alphabet = ("a".."z").to_a << " "
     @shift_hash = Hash.new(0)
     @number = 0
     @encrypted_message = nil
+    @random_key = nil
   end
 
   def key_generator
     numbers = (0..9).to_a
-    numbers.sample(5).join
+    @random_key = numbers.sample(5).join
   end
 
   def split_key(key)
@@ -87,7 +89,7 @@ class Enigma
     letter_encrypted
   end
 
-  def encrypt(message, key, date =Date.today.strftime("%d%m%y"))
+  def encrypt(message, key =key_generator, date =Date.today.strftime("%d%m%y"))
     {
       encryption: encryptor(message, key, date),
       key: key,
