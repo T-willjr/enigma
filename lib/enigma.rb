@@ -1,19 +1,24 @@
 require 'pry'
+require 'date'
 class Enigma
-
+  attr_reader :encrypted_message, :random_key
+  
   def initialize
     @alphabet = ("a".."z").to_a << " "
     @shift_hash = Hash.new(0)
     @number = 0
+    @encrypted_message = nil
+    @random_key = nil
   end
 
   def key_generator
     numbers = (0..9).to_a
-    numbers.sample(5).join
+    @random_key = numbers.sample(5).join
   end
 
   def split_key(key)
     array = []
+    #binding.pry
     array << key[0..1].to_i
     array << key[1..2].to_i
     array << key[2..3].to_i
@@ -29,16 +34,20 @@ class Enigma
 
   def final_shift(key, offset)
     offset_array = offset.chars
-    @shift_hash[:A] = key[0] + offset[0].to_i
-    @shift_hash[:B] = key[1] + offset[1].to_i
-    @shift_hash[:C] = key[2] + offset[2].to_i
-    @shift_hash[:D] = key[3] + offset[3].to_i
+    key_array = split_key(key)
+    @shift_hash[:A] = key_array[0] + offset_array[0].to_i
+    @shift_hash[:B] = key_array[1] + offset_array[1].to_i
+    @shift_hash[:C] = key_array[2] + offset_array[2].to_i
+    @shift_hash[:D] = key_array[3] + offset_array[3].to_i
     @shift_hash
   end
+  #exfml qpody"
 
-  def encryptor(message, key, date)
-    message_array = message.downcase.chars
+  def encryptor(message, key, date =Date.today.strftime("%d%m%y"))
+    offset = date_to_offset(date)
+    final_shift(key, offset)
     encrypted_message_array = []
+    message_array = message.downcase.chars
     message_array.each { |letter|
       if letter == " "
         if @number == 4
@@ -58,7 +67,7 @@ class Enigma
         encrypted_message_array << letter
       end
     }
-    encrypted_message_array.join
+    @encrypted_message = encrypted_message_array.join
   end
 
   def encrypted_letter(letter)
@@ -80,7 +89,7 @@ class Enigma
     letter_encrypted
   end
 
-  def encrypt(message, key, date)
+  def encrypt(message, key =key_generator, date =Date.today.strftime("%d%m%y"))
     {
       encryption: encryptor(message, key, date),
       key: key,
