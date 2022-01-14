@@ -2,7 +2,7 @@ require 'pry'
 require 'date'
 class Enigma
   attr_reader :encrypted_message, :random_key
-  
+
   def initialize
     @alphabet = ("a".."z").to_a << " "
     @shift_hash = Hash.new(0)
@@ -95,5 +95,51 @@ class Enigma
       key: key,
       date: date
     }
+  end
+
+  def decryptor(message, key, date)
+    offset = date_to_offset(date)
+    final_shift(key, offset)
+    message_array = message.downcase.chars
+    decrypted_message_array = []
+    message_array.each { |letter|
+      if letter == " "
+        if @number == 4
+          @number = 0
+        else
+          @number += 1
+        end
+        decrypted_message_array << letter
+      elsif @alphabet.include?(letter)
+        decrypted_message_array << decrypted_letter(letter)
+      else
+        if @number == 4
+          @number = 0
+        else
+          @number += 1
+        end
+        decrypted_message_array << letter
+      end
+    }
+    decrypted_message_array.join
+  end
+
+  def decrypted_letter(letter)
+    @number += 1
+    if @number == 1
+      letter_index = @alphabet.index(letter)
+      letter_decrypted = @alphabet.rotate(letter_index - @shift_hash[:A])[0]
+    elsif @number == 2
+      letter_index = @alphabet.index(letter)
+      letter_decrypted = @alphabet.rotate(letter_index - @shift_hash[:B])[0]
+    elsif @number == 3
+      letter_index = @alphabet.index(letter)
+      letter_decrypted = @alphabet.rotate(letter_index - @shift_hash[:C])[0]
+    elsif @number == 4
+      @number = 0
+      letter_index = @alphabet.index(letter)
+      letter_decrypted = @alphabet.rotate(letter_index - @shift_hash[:D])[0]
+    end
+    letter_decrypted
   end
 end
