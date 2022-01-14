@@ -1,7 +1,7 @@
 require 'pry'
 require 'date'
 class Enigma
-  attr_reader :encrypted_message, :decrypted_message, :random_key
+  attr_reader :encrypted_message, :decrypted_message, :random_key, :key, :date
 
   def initialize
     @alphabet = ("a".."z").to_a << " "
@@ -10,6 +10,9 @@ class Enigma
     @encrypted_message = nil
     @random_key = nil
     @decrypted_letter = nil
+    @key = nil
+    @date = nil
+    @decrypted_message = nil
   end
 
   def key_generator
@@ -41,9 +44,8 @@ class Enigma
     @shift_hash[:D] = key_array[3] + offset_array[3].to_i
     @shift_hash
   end
-  #exfml qpody"
 
-  def encryptor(message, key, date =Date.today.strftime("%d%m%y"))
+  def encryptor(message, key, date)
     offset = date_to_offset(date)
     final_shift(key, offset)
     encrypted_message_array = []
@@ -90,6 +92,8 @@ class Enigma
   end
 
   def encrypt(message, key =key_generator, date =Date.today.strftime("%d%m%y"))
+    @key = key
+    @date = date
     @encrypted = {
       encryption: encryptor(message, key, date),
       key: key,
@@ -144,6 +148,8 @@ class Enigma
   end
 
   def decrypt(message, key, date =Date.today.strftime("%d%m%y"))
+    @key = key
+    @date = date 
     {
       decryption: decryptor(message, key, date),
       key: key,
