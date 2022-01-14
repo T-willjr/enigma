@@ -56,6 +56,15 @@ RSpec.describe Enigma do
       })
     end
 
+    it "encrypts a message with todays date and random key" do
+
+      expect(subject.encrypt("hello world")).to eq({
+       encryption: subject.encrypted_message,
+       key: subject.random_key,
+       date: Date.today.strftime("%d%m%y")
+      })
+    end
+
     it "returns encrypted information in hash" do
       expected =  {
        encryption: "keder ohulw",
