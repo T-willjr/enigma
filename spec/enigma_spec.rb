@@ -80,6 +80,10 @@ RSpec.describe Enigma do
       it "decrypts a message with a key and date" do
         expect(subject.decryptor("keder ohulw", "02715", "040895")).to eq("hello world")
       end
+
+      it "decrypts a message that includes characters or capitalized" do
+        expect(subject.decryptor("KEDER, prrdx!$%^", "02715", "040895")).to eq("hello, world!$%^")
+      end
     end
   end
 end
