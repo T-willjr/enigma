@@ -142,4 +142,12 @@ class Enigma
     end
     letter_decrypted
   end
+
+  def decrypt(message, key, date)
+    {
+      decryption: decryptor(message, key, date),
+      key: key,
+      date: date
+    }
+  end
 end
