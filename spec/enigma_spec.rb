@@ -26,7 +26,7 @@ RSpec.describe Enigma do
   context "Encrypting a message" do
 
     it "creates final shift" do
-      key = [02,27,71,15]
+      key = "02715"
       offset = "1025"
       final_shift = {
         A: 3,
@@ -38,13 +38,22 @@ RSpec.describe Enigma do
     end
 
     it "encrypts a message with a key and date" do
-      subject.final_shift([02,27,71,15], "1025")
+
       expect(subject.encryptor("hello world", "02715", "040895")).to eq("keder ohulw")
     end
 
     it "encrypts a message that includes characters or capitalized" do
-      subject.final_shift([02,27,71,15], "1025")
+
       expect(subject.encryptor("HELLO, world!", "02715", "040895")).to eq("keder, prrdx!")
+    end
+
+    it "encrypts a message with todays date" do
+
+      expect(subject.encrypt("hello world", "02715")).to eq({
+       encryption: subject.encrypted_message,
+       key: "02715",
+       date: Date.today.strftime("%d%m%y")
+      })
     end
 
     it "returns encrypted information in hash" do
@@ -53,7 +62,7 @@ RSpec.describe Enigma do
        key: "02715",
        date: "040895"
       }
-      subject.final_shift([02,27,71,15], "1025")
+
       expect(subject.encrypt("hello world", "02715", "040895")).to eq(expected)
     end
   end
