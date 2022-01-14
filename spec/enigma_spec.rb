@@ -93,6 +93,15 @@ RSpec.describe Enigma do
         }
         expect(subject.decrypt("keder ohulw", "02715", "040895")).to eq(expected)
       end
+
+      it "decrypts a message with todays date" do
+        subject.encrypt("hello world", "02715")
+        expect(subject.decrypt(subject.encrypted_message, "02715")).to eq({
+         decryption: subject.decrypted_message,
+         key: "02715",
+         date: Date.today.strftime("%d%m%y")
+        })
+      end
     end
   end
 end
