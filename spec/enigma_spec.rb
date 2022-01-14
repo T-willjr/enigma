@@ -74,5 +74,12 @@ RSpec.describe Enigma do
 
       expect(subject.encrypt("hello world", "02715", "040895")).to eq(expected)
     end
+
+    context "Decrpyting a message" do
+
+      it "decrypts a message with a key and date" do
+        expect(subject.decryptor("keder ohulw", "02715", "040895")).to eq("hello world")
+      end
+    end
   end
 end
