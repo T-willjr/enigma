@@ -1,7 +1,7 @@
 require 'pry'
 require 'date'
 class Enigma
-  attr_reader :encrypted_message, :random_key
+  attr_reader :encrypted_message, :decrypted_message, :random_key
 
   def initialize
     @alphabet = ("a".."z").to_a << " "
@@ -9,6 +9,7 @@ class Enigma
     @number = 0
     @encrypted_message = nil
     @random_key = nil
+    @decrypted_letter = nil
   end
 
   def key_generator
@@ -18,7 +19,6 @@ class Enigma
 
   def split_key(key)
     array = []
-    #binding.pry
     array << key[0..1].to_i
     array << key[1..2].to_i
     array << key[2..3].to_i
@@ -90,7 +90,7 @@ class Enigma
   end
 
   def encrypt(message, key =key_generator, date =Date.today.strftime("%d%m%y"))
-    {
+    @encrypted = {
       encryption: encryptor(message, key, date),
       key: key,
       date: date
@@ -121,7 +121,7 @@ class Enigma
         decrypted_message_array << letter
       end
     }
-    decrypted_message_array.join
+    @decrypted_message = decrypted_message_array.join
   end
 
   def decrypted_letter(letter)
@@ -143,7 +143,7 @@ class Enigma
     letter_decrypted
   end
 
-  def decrypt(message, key, date)
+  def decrypt(message, key, date =Date.today.strftime("%d%m%y"))
     {
       decryption: decryptor(message, key, date),
       key: key,
