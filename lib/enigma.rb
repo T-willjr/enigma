@@ -6,18 +6,18 @@ require_relative 'decryptable'
 class Enigma
   include Encryptable
   include Decryptable
-  attr_reader :encrypted_message, :decrypted_message, :random_key, :key, :date
+  attr_reader :encrypted_message, :decrypted_message,
+              :random_key, :key, :date, :shift_count
 
   def initialize
     @alphabet = ("a".."z").to_a << " "
     @shift_hash = Hash.new(0)
-    @number = 0
+    @shift_count = 0
     @encrypted_message = nil
-    @random_key = nil
-    @decrypted_letter = nil
-    @key = nil
-    @date = nil
     @decrypted_message = nil
+    @key = nil
+    @random_key = nil
+    @date = nil
   end
 
   def key_generator
@@ -49,5 +49,4 @@ class Enigma
     @shift_hash[:D] = key_array[3] + offset_array[3].to_i
     @shift_hash
   end
-
 end
