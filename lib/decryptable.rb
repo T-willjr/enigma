@@ -3,7 +3,7 @@ module Decryptable
     offset = date_to_offset(date)
     final_shift(key, offset)
     message_array = message.downcase.chars
-    @decrypted_message = decrypt_character_filter(message_array).join
+    @decrypted_message = decrypt_character_filter(message_array)
   end
 
   def decrypt_character_filter(message_array)
@@ -26,7 +26,7 @@ module Decryptable
         end
         decrypted_message_array << letter
       end }
-      decrypted_message_array
+      decrypted_message_array.join
   end
 
   def decrypted_letter(letter)

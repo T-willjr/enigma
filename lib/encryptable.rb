@@ -2,8 +2,12 @@ module Encryptable
   def encryptor(message, key, date)
     offset = date_to_offset(date)
     final_shift(key, offset)
-    encrypted_message_array = []
     message_array = message.downcase.chars
+    @encrypted_message = encrypt_character_filter(message_array)
+  end
+
+  def encrypt_character_filter(message_array)
+    encrypted_message_array = []
     message_array.each { |letter|
       if letter == " "
         if @number == 4
@@ -23,7 +27,7 @@ module Encryptable
         encrypted_message_array << letter
       end
     }
-    @encrypted_message = encrypted_message_array.join
+    encrypted_message_array.join
   end
 
   def encrypted_letter(letter)
