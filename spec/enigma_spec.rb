@@ -1,3 +1,4 @@
+require_relative 'spec_helper'
 require 'date'
 require './lib/enigma'
 
@@ -6,6 +7,7 @@ RSpec.describe Enigma do
 
     it "exists" do
       expect(subject).to be_a Enigma
+      expect(subject.shift_count).to eq(0)
     end
 
   context "Finding the Shifts" do
@@ -23,8 +25,6 @@ RSpec.describe Enigma do
     end
   end
 
-  context "Encrypting a message" do
-
     it "creates final shift" do
       key = "02715"
       offset = "1025"
@@ -37,19 +37,19 @@ RSpec.describe Enigma do
       expect(subject.final_shift(key, offset)).to eq(final_shift)
     end
 
-    it "encrypts a message with a key and date" do
+  context "Encrypting a message" do
 
+    it "encrypts a message with a key and date" do
       expect(subject.encryptor("hello world", "02715", "040895")).to eq("keder ohulw")
     end
 
     it "encrypts a message that includes characters or capitalized" do
-
       expect(subject.encryptor("HELLO, world!", "02715", "040895")).to eq("keder, prrdx!")
     end
 
     it "encrypts a message with todays date" do
-
-      expect(subject.encrypt("hello world", "02715")).to eq({
+      expect(subject.encrypt("hello world", "02715")).to eq(
+      {
        encryption: subject.encrypted_message,
        key: "02715",
        date: Date.today.strftime("%d%m%y")
@@ -57,8 +57,8 @@ RSpec.describe Enigma do
     end
 
     it "encrypts a message with todays date and random key" do
-
-      expect(subject.encrypt("hello world")).to eq({
+      expect(subject.encrypt("hello world")).to eq(
+      {
        encryption: subject.encrypted_message,
        key: subject.random_key,
        date: Date.today.strftime("%d%m%y")
@@ -96,7 +96,8 @@ RSpec.describe Enigma do
 
       it "decrypts a message with todays date" do
         subject.encrypt("hello world", "02715")
-        expect(subject.decrypt(subject.encrypted_message, "02715")).to eq({
+        expect(subject.decrypt(subject.encrypted_message, "02715")).to eq(
+        {
          decryption: subject.decrypted_message,
          key: "02715",
          date: Date.today.strftime("%d%m%y")
