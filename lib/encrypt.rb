@@ -1,4 +1,3 @@
-require 'pry'
 require_relative('enigma')
 
 enigma = Enigma.new

@@ -1,52 +1,43 @@
-require 'pry'
 require 'date'
-require_relative 'encryptable'
-require_relative 'decryptable'
+require_relative 'message_changer'
+require_relative 'shift_generator'
 
 class Enigma
-  include Encryptable
-  include Decryptable
-  attr_reader :encrypted_message, :decrypted_message,
-              :random_key, :key, :date, :shift_count
+  include MessageChanger
+  include ShiftGenerator
+  attr_reader :new_message, :random_key, :key,
+              :date, :shift_count
+              :message_to_be_encrypted
 
   def initialize
     @alphabet = ("a".."z").to_a << " "
     @shift_hash = Hash.new(0)
     @shift_count = 0
-    @encrypted_message = nil
-    @decrypted_message = nil
+    @new_message = nil
     @key = nil
     @random_key = nil
     @date = nil
+    @message_to_be_encrypted = true
   end
 
-  def key_generator
-    numbers = (0..9).to_a
-    @random_key = numbers.sample(5).join
+  def encrypt(message, key =key_generator, date =Date.today.strftime("%d%m%y"))
+    @key = key
+    @date = date
+    @encrypted = {
+      encryption: message_generator(message, key, date),
+      key: key,
+      date: date
+    }
   end
 
-  def split_key(key)
-    array = []
-    array << key[0..1].to_i
-    array << key[1..2].to_i
-    array << key[2..3].to_i
-    array << key[3..4].to_i
-    array
-  end
-
-  def date_to_offset(date)
-    date_squared = date.to_i ** 2
-    number_array = date_squared.to_s.chars
-    number_array.last(4).join
-  end
-
-  def final_shift(key, offset)
-    offset_array = offset.chars
-    key_array = split_key(key)
-    @shift_hash[:A] = key_array[0] + offset_array[0].to_i
-    @shift_hash[:B] = key_array[1] + offset_array[1].to_i
-    @shift_hash[:C] = key_array[2] + offset_array[2].to_i
-    @shift_hash[:D] = key_array[3] + offset_array[3].to_i
-    @shift_hash
+  def decrypt(message, key, date =Date.today.strftime("%d%m%y"))
+    @key = key
+    @date = date
+    @message_to_be_encrypted = false
+    {
+      decryption: message_generator(message, key, date),
+      key: key,
+      date: date
+    }
   end
 end
