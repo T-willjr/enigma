@@ -40,17 +40,19 @@ RSpec.describe Enigma do
   context "Encrypting a message" do
 
     it "encrypts a message with a key and date" do
-      expect(subject.encryptor("hello world", "02715", "040895")).to eq("keder ohulw")
+      subject.encrypt("hello world", "02715", "040895")
+      expect(subject.new_message).to eq("keder ohulw")
     end
 
-    it "encrypts a message that includes characters or capitalized" do
-      expect(subject.encryptor("HELLO, world!", "02715", "040895")).to eq("keder, prrdx!")
+      it "encrypts a message that includes characters or capitalized" do
+      subject.encrypt("hello, world!", "02715", "040895")
+      expect(subject.new_message).to eq("keder, prrdx!")
     end
 
     it "encrypts a message with todays date" do
       expect(subject.encrypt("hello world", "02715")).to eq(
       {
-       encryption: subject.encrypted_message,
+       encryption: subject.new_message,
        key: "02715",
        date: Date.today.strftime("%d%m%y")
       })
@@ -59,7 +61,7 @@ RSpec.describe Enigma do
     it "encrypts a message with todays date and random key" do
       expect(subject.encrypt("hello world")).to eq(
       {
-       encryption: subject.encrypted_message,
+       encryption: subject.new_message,
        key: subject.random_key,
        date: Date.today.strftime("%d%m%y")
       })
@@ -78,11 +80,13 @@ RSpec.describe Enigma do
     context "Decrpyting a message" do
 
       it "decrypts a message with a key and date" do
-        expect(subject.decryptor("keder ohulw", "02715", "040895")).to eq("hello world")
+        subject.decrypt("keder ohulw", "02715", "040895")
+        expect(subject.new_message).to eq("hello world")
       end
 
       it "decrypts a message that includes characters or capitalized" do
-        expect(subject.decryptor("KEDER, prrdx!$%^", "02715", "040895")).to eq("hello, world!$%^")
+        subject.decrypt("KEDER, prrdx!$%^", "02715", "040895")
+        expect(subject.new_message).to eq("hello, world!$%^")
       end
 
       it "returns decrypted information in hash" do
@@ -96,9 +100,9 @@ RSpec.describe Enigma do
 
       it "decrypts a message with todays date" do
         subject.encrypt("hello world", "02715")
-        expect(subject.decrypt(subject.encrypted_message, "02715")).to eq(
+        expect(subject.decrypt(subject.new_message, "02715")).to eq(
         {
-         decryption: subject.decrypted_message,
+         decryption: subject.new_message,
          key: "02715",
          date: Date.today.strftime("%d%m%y")
         })
