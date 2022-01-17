@@ -6,7 +6,7 @@ Functionality: 3
   - Uses message.txt file for original message and creates a new file for encrypted/decrypted message 
   - User can give any name for new file in command line 
 
-Object Oriented Programming: 3
+Object Oriented Programming: 4
   - After refactoring project adheres to single responsibility and no class/module is too big
   - Seperated into three parts. 
     * Enigma Class  
