@@ -1,3 +1,4 @@
+require 'pry'
 module MessageChanger
   def message_generator(message, key, date)
     offset = date_to_offset(date)
@@ -9,12 +10,11 @@ module MessageChanger
   def character_filter(original_message_array)
     new_message_array = []
     original_message_array.each { |letter|
-      if letter == " "
-        if @shift_count == 4
-          @shift_count = 0
-        else
-          @shift_count += 1
-        end
+      @shift_count += 1
+      if letter == " " && @shift_count == 4
+        @shift_count = 0
+        new_message_array << letter
+      elsif letter == " "
         new_message_array << letter
       elsif @alphabet.include?(letter) && @message_to_be_encrypted
         new_message_array << encrypted_letter(letter)
@@ -23,8 +23,6 @@ module MessageChanger
       else
         if @shift_count == 4
           @shift_count = 0
-        else
-          @shift_count += 1
         end
         new_message_array << letter
       end
@@ -33,7 +31,6 @@ module MessageChanger
   end
 
   def encrypted_letter(letter)
-    @shift_count += 1
     letter_index = @alphabet.index(letter)
     if @shift_count == 1
       letter_encrypted = @alphabet.rotate(letter_index + @shift_hash[:A])[0]
@@ -49,7 +46,6 @@ module MessageChanger
   end
 
   def decrypted_letter(letter)
-    @shift_count += 1
     letter_index = @alphabet.index(letter)
     if @shift_count == 1
       letter_decrypted = @alphabet.rotate(letter_index - @shift_hash[:A])[0]
@@ -63,5 +59,4 @@ module MessageChanger
     end
     letter_decrypted
   end
-
 end
