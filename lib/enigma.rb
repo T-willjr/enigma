@@ -1,23 +1,21 @@
-require 'pry'
 require 'date'
-require_relative 'encryptable'
-require_relative 'decryptable'
+require_relative 'message_changer'
 
 class Enigma
-  include Encryptable
-  include Decryptable
-  attr_reader :encrypted_message, :decrypted_message,
-              :random_key, :key, :date, :shift_count
+  include MessageChanger
+  attr_reader :new_message, :random_key, :key,
+              :date, :shift_count
+              :message_to_be_encrypted
 
   def initialize
     @alphabet = ("a".."z").to_a << " "
     @shift_hash = Hash.new(0)
     @shift_count = 0
-    @encrypted_message = nil
-    @decrypted_message = nil
+    @new_message = nil
     @key = nil
     @random_key = nil
     @date = nil
+    @message_to_be_encrypted = true
   end
 
   def key_generator
